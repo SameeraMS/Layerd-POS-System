@@ -1,11 +1,10 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.dao.CustomerDAOImpl;
+
+import com.example.layeredarchitecture.dao.ItemDAO;
 import com.example.layeredarchitecture.dao.ItemDAOImpl;
 import com.example.layeredarchitecture.db.DBConnection;
-import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.example.layeredarchitecture.view.tdm.ItemTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -74,7 +73,7 @@ public class ManageItemsFormController {
         tblItems.getItems().clear();
         try {
 
-            ItemDAOImpl itemDAO = new ItemDAOImpl();
+            ItemDAO itemDAO = new ItemDAOImpl();
             ArrayList<ItemDTO> allItem = itemDAO.getAllItem();
 
             for (ItemDTO i : allItem) {
@@ -142,7 +141,7 @@ public class ManageItemsFormController {
         /*Delete Item*/
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
         try {
-            ItemDAOImpl dao = new ItemDAOImpl();
+            ItemDAO dao = new ItemDAOImpl();
             if (!dao.existItem(code)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
             }
@@ -151,8 +150,8 @@ public class ManageItemsFormController {
             pstm.setString(1, code);
             pstm.executeUpdate();*/
 
-            ItemDAOImpl itemDAO = new ItemDAOImpl();
-            boolean isDelete = itemDAO.deleteItem(code);
+
+            boolean isDelete = dao.deleteItem(code);
 
             if (isDelete){
                 tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
@@ -192,7 +191,7 @@ public class ManageItemsFormController {
 
         if (btnSave.getText().equalsIgnoreCase("save")) {
             try {
-                ItemDAOImpl dao = new ItemDAOImpl();
+                ItemDAO dao = new ItemDAOImpl();
                 if (dao.existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
@@ -205,8 +204,8 @@ public class ManageItemsFormController {
                 pstm.setInt(4, qtyOnHand);
                 pstm.executeUpdate();*/
 
-                ItemDAOImpl itemDAO = new ItemDAOImpl();
-                boolean isSaved = itemDAO.saveItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
+
+                boolean isSaved = dao.saveItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
 
                 if (isSaved){
                     tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
@@ -220,7 +219,7 @@ public class ManageItemsFormController {
             }
         } else {
             try {
-                ItemDAOImpl dao = new ItemDAOImpl();
+                ItemDAO dao = new ItemDAOImpl();
                 if (!dao.existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
@@ -232,8 +231,8 @@ public class ManageItemsFormController {
                 pstm.setInt(3, qtyOnHand);
                 pstm.setString(4, code);
                 pstm.executeUpdate();*/
-                ItemDAOImpl itemDAO = new ItemDAOImpl();
-                boolean isUpdated = itemDAO.updateItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
+
+                boolean isUpdated = dao.updateItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
 
                 if (isUpdated){
                     new Alert(Alert.AlertType.INFORMATION, "Item updated successfully").show();
@@ -271,7 +270,7 @@ public class ManageItemsFormController {
     private String generateNewId() {
         try {
 
-            ItemDAOImpl itemDAO = new ItemDAOImpl();
+            ItemDAO itemDAO = new ItemDAOImpl();
             return itemDAO.nextId();
 
             /*Connection connection = DBConnection.getDbConnection().getConnection();

@@ -1,5 +1,6 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.dao.CustomerDAO;
 import com.example.layeredarchitecture.dao.CustomerDAOImpl;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
@@ -69,7 +70,7 @@ public class ManageCustomersFormController {
         tblCustomers.getItems().clear();
         /*Get all customers*/
         try {
-            CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+            CustomerDAO customerDAO = new CustomerDAOImpl();
             ArrayList<CustomerDTO> allCustomers = customerDAO.getAllCustomers();
 
             for (CustomerDTO c : allCustomers) {
@@ -148,14 +149,13 @@ public class ManageCustomersFormController {
         if (btnSave.getText().equalsIgnoreCase("save")) {
             /*Save Customer*/
             try {
-                CustomerDAOImpl dao = new CustomerDAOImpl();
+                CustomerDAO dao = new CustomerDAOImpl();
                 if (dao.existCustomer(id)) {
                     new Alert(Alert.AlertType.ERROR, id + " already exists").show();
                 }
 
                 CustomerDTO dto = new CustomerDTO(id, name, address);
-                CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-                boolean isSaved = customerDAO.saveCustomer(dto);
+                boolean isSaved = dao.saveCustomer(dto);
 
                 if (isSaved) {
                     tblCustomers.getItems().add(new CustomerTM(id, name, address));
@@ -182,12 +182,11 @@ public class ManageCustomersFormController {
         } else {
             /*Update customer*/
             try {
-                CustomerDAOImpl dao = new CustomerDAOImpl();
+                CustomerDAO dao = new CustomerDAOImpl();
                 if (!dao.existCustomer(id)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
                 }
-                CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-                boolean isUpdate = customerDAO.updateCustomer(new CustomerDTO(id, name, address));
+                boolean isUpdate = dao.updateCustomer(new CustomerDTO(id, name, address));
 
                 if (isUpdate){
                     new Alert(Alert.AlertType.CONFIRMATION, "Customer updated successfully").show();
@@ -238,8 +237,7 @@ public class ManageCustomersFormController {
             pstm.setString(1, id);
             pstm.executeUpdate();*/
 
-            CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-            boolean isDelete = customerDAO.deleteCustomer(id);
+            boolean isDelete = dao.deleteCustomer(id);
 
             if (isDelete){
                 new Alert(Alert.AlertType.CONFIRMATION, "Customer deleted successfully").show();
@@ -262,7 +260,7 @@ public class ManageCustomersFormController {
     private String generateNewId() {
         try {
 
-            CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+            CustomerDAO customerDAO = new CustomerDAOImpl();
             return customerDAO.nextId();
 
             /*Connection connection = DBConnection.getDbConnection().getConnection();
