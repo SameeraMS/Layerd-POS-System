@@ -38,6 +38,7 @@ public class ManageCustomersFormController {
     public TextField txtCustomerAddress;
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
+    CustomerDAO customerDAO = new CustomerDAOImpl();
 
     public void initialize() {
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -70,7 +71,7 @@ public class ManageCustomersFormController {
         tblCustomers.getItems().clear();
         /*Get all customers*/
         try {
-            CustomerDAO customerDAO = new CustomerDAOImpl();
+
             ArrayList<CustomerDTO> allCustomers = customerDAO.getAllCustomers();
 
             for (CustomerDTO c : allCustomers) {
@@ -149,13 +150,13 @@ public class ManageCustomersFormController {
         if (btnSave.getText().equalsIgnoreCase("save")) {
             /*Save Customer*/
             try {
-                CustomerDAO dao = new CustomerDAOImpl();
-                if (dao.existCustomer(id)) {
+
+                if (customerDAO.existCustomer(id)) {
                     new Alert(Alert.AlertType.ERROR, id + " already exists").show();
                 }
 
                 CustomerDTO dto = new CustomerDTO(id, name, address);
-                boolean isSaved = dao.saveCustomer(dto);
+                boolean isSaved = customerDAO.saveCustomer(dto);
 
                 if (isSaved) {
                     tblCustomers.getItems().add(new CustomerTM(id, name, address));
@@ -182,11 +183,11 @@ public class ManageCustomersFormController {
         } else {
             /*Update customer*/
             try {
-                CustomerDAO dao = new CustomerDAOImpl();
-                if (!dao.existCustomer(id)) {
+
+                if (!customerDAO.existCustomer(id)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
                 }
-                boolean isUpdate = dao.updateCustomer(new CustomerDTO(id, name, address));
+                boolean isUpdate = customerDAO.updateCustomer(new CustomerDTO(id, name, address));
 
                 if (isUpdate){
                     new Alert(Alert.AlertType.CONFIRMATION, "Customer updated successfully").show();
@@ -228,8 +229,8 @@ public class ManageCustomersFormController {
         /*Delete Customer*/
         String id = tblCustomers.getSelectionModel().getSelectedItem().getId();
         try {
-            CustomerDAOImpl dao = new CustomerDAOImpl();
-            if (!dao.existCustomer(id)) {
+
+            if (!customerDAO.existCustomer(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }
             /*Connection connection = DBConnection.getDbConnection().getConnection();
@@ -237,7 +238,7 @@ public class ManageCustomersFormController {
             pstm.setString(1, id);
             pstm.executeUpdate();*/
 
-            boolean isDelete = dao.deleteCustomer(id);
+            boolean isDelete = customerDAO.deleteCustomer(id);
 
             if (isDelete){
                 new Alert(Alert.AlertType.CONFIRMATION, "Customer deleted successfully").show();
@@ -260,7 +261,7 @@ public class ManageCustomersFormController {
     private String generateNewId() {
         try {
 
-            CustomerDAO customerDAO = new CustomerDAOImpl();
+
             return customerDAO.nextId();
 
             /*Connection connection = DBConnection.getDbConnection().getConnection();

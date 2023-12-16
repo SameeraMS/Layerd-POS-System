@@ -38,6 +38,7 @@ public class ManageItemsFormController {
     public TableView<ItemTM> tblItems;
     public TextField txtUnitPrice;
     public JFXButton btnAddNewItem;
+    ItemDAO itemDAO = new ItemDAOImpl();
 
     public void initialize() {
         tblItems.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
@@ -73,7 +74,7 @@ public class ManageItemsFormController {
         tblItems.getItems().clear();
         try {
 
-            ItemDAO itemDAO = new ItemDAOImpl();
+
             ArrayList<ItemDTO> allItem = itemDAO.getAllItem();
 
             for (ItemDTO i : allItem) {
@@ -141,8 +142,8 @@ public class ManageItemsFormController {
         /*Delete Item*/
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
         try {
-            ItemDAO dao = new ItemDAOImpl();
-            if (!dao.existItem(code)) {
+
+            if (!itemDAO.existItem(code)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
             }
             /*Connection connection = DBConnection.getDbConnection().getConnection();
@@ -151,7 +152,7 @@ public class ManageItemsFormController {
             pstm.executeUpdate();*/
 
 
-            boolean isDelete = dao.deleteItem(code);
+            boolean isDelete = itemDAO.deleteItem(code);
 
             if (isDelete){
                 tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
@@ -191,8 +192,8 @@ public class ManageItemsFormController {
 
         if (btnSave.getText().equalsIgnoreCase("save")) {
             try {
-                ItemDAO dao = new ItemDAOImpl();
-                if (dao.existItem(code)) {
+
+                if (itemDAO.existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save Item
@@ -205,7 +206,7 @@ public class ManageItemsFormController {
                 pstm.executeUpdate();*/
 
 
-                boolean isSaved = dao.saveItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
+                boolean isSaved = itemDAO.saveItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
 
                 if (isSaved){
                     tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
@@ -219,8 +220,8 @@ public class ManageItemsFormController {
             }
         } else {
             try {
-                ItemDAO dao = new ItemDAOImpl();
-                if (!dao.existItem(code)) {
+
+                if (!itemDAO.existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
                 /*Update Item*/
@@ -232,7 +233,7 @@ public class ManageItemsFormController {
                 pstm.setString(4, code);
                 pstm.executeUpdate();*/
 
-                boolean isUpdated = dao.updateItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
+                boolean isUpdated = itemDAO.updateItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
 
                 if (isUpdated){
                     new Alert(Alert.AlertType.INFORMATION, "Item updated successfully").show();
@@ -269,8 +270,6 @@ public class ManageItemsFormController {
 
     private String generateNewId() {
         try {
-
-            ItemDAO itemDAO = new ItemDAOImpl();
             return itemDAO.nextId();
 
             /*Connection connection = DBConnection.getDbConnection().getConnection();
