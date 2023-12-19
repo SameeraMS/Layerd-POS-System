@@ -19,5 +19,4 @@ public interface ItemDAO {
 
      String nextId() throws SQLException, ClassNotFoundException;
      ItemDTO findItem(String newItemCode) throws SQLException, ClassNotFoundException;
-     boolean updateItemqty(ItemDTO itemDTO, Connection connection) throws SQLException, ClassNotFoundException;
 }

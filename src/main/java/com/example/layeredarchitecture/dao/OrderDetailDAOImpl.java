@@ -8,25 +8,21 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class OrderDetailDAOImpl {
-
-    public boolean saveOrderDetail(String orderId, List<OrderDetailDTO> orderDetails, Connection connection) throws SQLException, ClassNotFoundException {
+public class OrderDetailDAOImpl implements OrderDetailDAO{
+    @Override
+    public boolean saveOrderDetail(String orderId, OrderDetailDTO orderDetails ) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement stm = connection.prepareStatement("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)");
 
-        for (OrderDetailDTO detail : orderDetails) {
+
             stm.setString(1, orderId);
-            stm.setString(2, detail.getItemCode());
-            stm.setBigDecimal(3, detail.getUnitPrice());
-            stm.setInt(4, detail.getQty());
-        }
+            stm.setString(2, orderDetails.getItemCode());
+            stm.setBigDecimal(3, orderDetails.getUnitPrice());
+            stm.setInt(4, orderDetails.getQty());
 
 
-        if (!(stm.executeUpdate() > 0)) {
-            connection.rollback();
-            connection.setAutoCommit(true);
-            return false;
-        } else {
-            return true;
-        }
+        return stm.executeUpdate() > 0;
+
+
     }
 }
