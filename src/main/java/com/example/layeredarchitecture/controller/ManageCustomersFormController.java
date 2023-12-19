@@ -72,7 +72,7 @@ public class ManageCustomersFormController {
         /*Get all customers*/
         try {
 
-            ArrayList<CustomerDTO> allCustomers = customerDAO.getAllCustomers();
+            ArrayList<CustomerDTO> allCustomers = customerDAO.getAll();
 
             for (CustomerDTO c : allCustomers) {
                 tblCustomers.getItems().add(new CustomerTM(c.getId(), c.getName(), c.getAddress()));
@@ -151,12 +151,12 @@ public class ManageCustomersFormController {
             /*Save Customer*/
             try {
 
-                if (customerDAO.existCustomer(id)) {
+                if (customerDAO.exist(id)) {
                     new Alert(Alert.AlertType.ERROR, id + " already exists").show();
                 }
 
                 CustomerDTO dto = new CustomerDTO(id, name, address);
-                boolean isSaved = customerDAO.saveCustomer(dto);
+                boolean isSaved = customerDAO.save(dto);
 
                 if (isSaved) {
                     tblCustomers.getItems().add(new CustomerTM(id, name, address));
@@ -184,10 +184,10 @@ public class ManageCustomersFormController {
             /*Update customer*/
             try {
 
-                if (!customerDAO.existCustomer(id)) {
+                if (!customerDAO.exist(id)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
                 }
-                boolean isUpdate = customerDAO.updateCustomer(new CustomerDTO(id, name, address));
+                boolean isUpdate = customerDAO.update(new CustomerDTO(id, name, address));
 
                 if (isUpdate){
                     new Alert(Alert.AlertType.CONFIRMATION, "Customer updated successfully").show();
@@ -230,7 +230,7 @@ public class ManageCustomersFormController {
         String id = tblCustomers.getSelectionModel().getSelectedItem().getId();
         try {
 
-            if (!customerDAO.existCustomer(id)) {
+            if (!customerDAO.exist(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }
             /*Connection connection = DBConnection.getDbConnection().getConnection();
@@ -238,7 +238,7 @@ public class ManageCustomersFormController {
             pstm.setString(1, id);
             pstm.executeUpdate();*/
 
-            boolean isDelete = customerDAO.deleteCustomer(id);
+            boolean isDelete = customerDAO.delete(id);
 
             if (isDelete){
                 new Alert(Alert.AlertType.CONFIRMATION, "Customer deleted successfully").show();

@@ -75,7 +75,7 @@ public class ManageItemsFormController {
         try {
 
 
-            ArrayList<ItemDTO> allItem = itemDAO.getAllItem();
+            ArrayList<ItemDTO> allItem = itemDAO.getAll();
 
             for (ItemDTO i : allItem) {
                 tblItems.getItems().add(new ItemTM(i.getCode(), i.getDescription(), i.getUnitPrice(), i.getQtyOnHand()));
@@ -143,7 +143,7 @@ public class ManageItemsFormController {
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
         try {
 
-            if (!itemDAO.existItem(code)) {
+            if (!itemDAO.exist(code)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
             }
             /*Connection connection = DBConnection.getDbConnection().getConnection();
@@ -152,7 +152,7 @@ public class ManageItemsFormController {
             pstm.executeUpdate();*/
 
 
-            boolean isDelete = itemDAO.deleteItem(code);
+            boolean isDelete = itemDAO.delete(code);
 
             if (isDelete){
                 tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
@@ -193,7 +193,7 @@ public class ManageItemsFormController {
         if (btnSave.getText().equalsIgnoreCase("save")) {
             try {
 
-                if (itemDAO.existItem(code)) {
+                if (itemDAO.exist(code)) {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save Item
@@ -206,7 +206,7 @@ public class ManageItemsFormController {
                 pstm.executeUpdate();*/
 
 
-                boolean isSaved = itemDAO.saveItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
+                boolean isSaved = itemDAO.save(new ItemDTO(code, description, unitPrice, qtyOnHand));
 
                 if (isSaved){
                     tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
@@ -221,7 +221,7 @@ public class ManageItemsFormController {
         } else {
             try {
 
-                if (!itemDAO.existItem(code)) {
+                if (!itemDAO.exist(code)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
                 /*Update Item*/
@@ -233,7 +233,7 @@ public class ManageItemsFormController {
                 pstm.setString(4, code);
                 pstm.executeUpdate();*/
 
-                boolean isUpdated = itemDAO.updateItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
+                boolean isUpdated = itemDAO.update(new ItemDTO(code, description, unitPrice, qtyOnHand));
 
                 if (isUpdated){
                     new Alert(Alert.AlertType.INFORMATION, "Item updated successfully").show();
