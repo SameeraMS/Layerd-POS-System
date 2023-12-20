@@ -41,12 +41,13 @@
       </Label>
       <TextField fx:id="txtCustomerName" layoutX="193.0" layoutY="120.0" prefHeight="28.0" prefWidth="437.0" promptText="Customer Name :" />
       <JFXComboBox fx:id="cmbOrderId" labelFloat="true" layoutX="22.0" layoutY="164.0" onAction="#OrderIdOnAction" prefHeight="28.0" prefWidth="161.0" promptText="Order Id:" />
-      <TableView fx:id="tblOrderDetails" layoutX="70.0" layoutY="207.0" prefHeight="261.0" prefWidth="425.0">
+      <TableView fx:id="tblOrderDetails" layoutX="70.0" layoutY="207.0" prefHeight="261.0" prefWidth="558.0">
          <columns>
             <TableColumn prefWidth="77.0" text="Code" />
             <TableColumn prefWidth="174.0" text="Description" />
             <TableColumn prefWidth="64.0" text="Qty" />
             <TableColumn prefWidth="99.0" text="Unit Price" />
+            <TableColumn prefWidth="132.0" text="Price" />
          </columns>
       </TableView>
       <Label fx:id="lblId" alignment="CENTER_RIGHT" layoutX="486.0" layoutY="68.0" prefHeight="24.0" prefWidth="152.0" text="ORDER ID : OD001">

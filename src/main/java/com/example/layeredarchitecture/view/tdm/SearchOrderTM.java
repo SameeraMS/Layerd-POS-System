@@ -8,12 +8,17 @@ public class SearchOrderTM {
     private String qty;
     private String unitPrice;
 
+    private double total;
 
-    public SearchOrderTM(String code, String description, String qty, String unitPrice) {
+    public SearchOrderTM() {
+    }
+
+    public SearchOrderTM(String code, String description, String qty, String unitPrice, double total) {
         this.code = code;
         this.description = description;
         this.qty = qty;
         this.unitPrice = unitPrice;
+        this.total = total;
     }
 
     public String getCode() {
@@ -48,13 +53,22 @@ public class SearchOrderTM {
         this.unitPrice = unitPrice;
     }
 
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
     @Override
     public String toString() {
         return "SearchOrderTM{" +
                 "code='" + code + '\'' +
                 ", description='" + description + '\'' +
-                ", qty=" + qty +
-                ", unitPrice=" + unitPrice +
+                ", qty='" + qty + '\'' +
+                ", unitPrice='" + unitPrice + '\'' +
+                ", total=" + total +
                 '}';
     }
 }

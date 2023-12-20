@@ -90,13 +90,16 @@ public class SearchOrderFormController {
                 lblId.setText(c.getOid());
                 txtOrderDate.setText(c.getDate());
 
-                tblOrderDetails.getItems().add(new SearchOrderTM(c.getItemcode(), c.getDescription(), c.getQty(), c.getUnitprice()));
+                double total = Double.parseDouble(c.getQty()) * Double.parseDouble(c.getUnitprice());
+
+                tblOrderDetails.getItems().add(new SearchOrderTM(c.getItemcode(), c.getDescription(), c.getQty(), c.getUnitprice(), total));
             }
 
             tblOrderDetails.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
             tblOrderDetails.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("description"));
             tblOrderDetails.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("qty"));
             tblOrderDetails.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+            tblOrderDetails.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("total"));
 
 
         } catch (SQLException e) {
