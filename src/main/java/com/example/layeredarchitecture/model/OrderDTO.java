@@ -1,26 +1,25 @@
 package com.example.layeredarchitecture.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
 
 public class OrderDTO  {
     private String orderId;
-    private LocalDate orderDate;
+    private String orderDate;
     private String customerId;
-    private String customerName;
-    private BigDecimal orderTotal;
+    /*private String customerName;
+    private BigDecimal orderTotal;*/
 
-    public OrderDTO() {
-    }
 
-    public OrderDTO(String orderId, LocalDate orderDate, String customerId, String customerName, BigDecimal orderTotal) {
+
+
+    public OrderDTO(String orderId, String orderDate, String customerId) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.customerId = customerId;
-        this.customerName = customerName;
-        this.orderTotal = orderTotal;
+        /*this.customerName = customerName;
+        this.orderTotal = orderTotal;*/
     }
 
     public String getOrderId() {
@@ -31,11 +30,11 @@ public class OrderDTO  {
         this.orderId = orderId;
     }
 
-    public LocalDate getOrderDate() {
+    public String getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
+    public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -47,7 +46,7 @@ public class OrderDTO  {
         this.customerId = customerId;
     }
 
-    public String getCustomerName() {
+   /* public String getCustomerName() {
         return customerName;
     }
 
@@ -61,7 +60,7 @@ public class OrderDTO  {
 
     public void setOrderTotal(BigDecimal orderTotal) {
         this.orderTotal = orderTotal;
-    }
+    }*/
 
     @Override
     public String toString() {
@@ -69,8 +68,8 @@ public class OrderDTO  {
                 "orderId='" + orderId + '\'' +
                 ", orderDate=" + orderDate +
                 ", customerId='" + customerId + '\'' +
-                ", customerName='" + customerName + '\'' +
-                ", orderTotal=" + orderTotal +
+               /* ", customerName='" + customerName + '\'' +
+                ", orderTotal=" + orderTotal +*/
                 '}';
     }
 }

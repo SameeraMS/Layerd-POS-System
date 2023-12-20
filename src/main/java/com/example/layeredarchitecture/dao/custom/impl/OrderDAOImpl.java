@@ -1,12 +1,15 @@
-package com.example.layeredarchitecture.dao;
+package com.example.layeredarchitecture.dao.custom.impl;
 
+import com.example.layeredarchitecture.dao.SQLUtil;
+import com.example.layeredarchitecture.dao.custom.OrderDAO;
+import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.OrderDTO;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class OrderDAOImpl implements OrderDAO{
+public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public String nextId() throws SQLException, ClassNotFoundException {
@@ -20,12 +23,26 @@ public class OrderDAOImpl implements OrderDAO{
 
     @Override
     public OrderDTO search(String newValue) throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet rst = SQLUtil.execute("SELECT * FROM Orders WHERE oid=?",newValue + "");
+
+        rst.next();
+        OrderDTO orderDTO = new OrderDTO(newValue + "", rst.getString("date"), rst.getString("customerID"));
+
+        return orderDTO;
     }
 
     @Override
     public ArrayList<OrderDTO> getAll() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet rst = SQLUtil.execute("SELECT * FROM Orders");
+
+        ArrayList<OrderDTO> getAllOrders = new ArrayList<>();
+
+        while (rst.next()) {
+            OrderDTO orderDTO = new OrderDTO(rst.getString("oid"), rst.getString("date"), rst.getString("customerID"));
+            getAllOrders.add(orderDTO);
+        }
+
+        return getAllOrders;
     }
 
     @Override
