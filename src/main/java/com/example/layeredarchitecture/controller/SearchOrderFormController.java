@@ -6,10 +6,8 @@ import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.OrderDAOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.OrderDetailDAOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.QueryDAOImpl;
-import com.example.layeredarchitecture.model.CustomerDTO;
-import com.example.layeredarchitecture.model.OrderDTO;
-import com.example.layeredarchitecture.model.OrderDetailDTO;
-import com.example.layeredarchitecture.model.SearchDto;
+import com.example.layeredarchitecture.model.*;
+import com.example.layeredarchitecture.view.tdm.SearchOrderTM;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -20,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -33,12 +32,12 @@ public class SearchOrderFormController {
 
     public AnchorPane root;
     public TextField txtCustomerName;
-    public JFXComboBox cmbOrderId;
-    public TableView tblOrderDetails;
+    public JFXComboBox<String> cmbOrderId;
+    public TableView<SearchOrderTM> tblOrderDetails;
     public Label lblId;
     public Label lblDate;
     public TextField txtOrderDate;
-    public JFXComboBox cmbCustomerId;
+    public JFXComboBox<String> cmbCustomerId;
 
     CustomerDAO customerDAO = new CustomerDAOImpl();
     OrderDAOImpl orderDAO = new OrderDAOImpl();
@@ -59,6 +58,8 @@ public class SearchOrderFormController {
             for (CustomerDTO c : allCustomers) {
                 cmbCustomerId.getItems().add(c.getId());
             }
+
+
 
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to load customer ids").show();
@@ -81,10 +82,22 @@ public class SearchOrderFormController {
         String id = (String) cmbOrderId.getValue();
 
         try {
-            OrderDTO dto = orderDAO.search(id);
 
-            lblId.setText(dto.getOrderId());
-            txtOrderDate.setText(dto.getOrderDate().toString());
+            tblOrderDetails.getItems().clear();
+            ArrayList<AddtblDto> dtolist = queryDAO.addtbl(id);
+
+            for (AddtblDto c : dtolist) {
+                lblId.setText(c.getOid());
+                txtOrderDate.setText(c.getDate());
+
+                tblOrderDetails.getItems().add(new SearchOrderTM(c.getItemcode(), c.getDescription(), c.getQty(), c.getUnitprice()));
+            }
+
+            tblOrderDetails.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
+            tblOrderDetails.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("description"));
+            tblOrderDetails.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("qty"));
+            tblOrderDetails.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
