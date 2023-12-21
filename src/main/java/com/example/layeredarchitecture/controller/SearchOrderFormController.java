@@ -1,10 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.dao.custom.CustomerDAO;
-import com.example.layeredarchitecture.dao.custom.OrderDAO;
 import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDetailDAOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.QueryDAOImpl;
 import com.example.layeredarchitecture.model.*;
 import com.example.layeredarchitecture.view.tdm.SearchOrderTM;
@@ -38,11 +35,7 @@ public class SearchOrderFormController {
     public Label lblDate;
     public TextField txtOrderDate;
     public JFXComboBox<String> cmbCustomerId;
-
     CustomerDAO customerDAO = new CustomerDAOImpl();
-    OrderDAOImpl orderDAO = new OrderDAOImpl();
-    OrderDetailDAOImpl orderDetailsDAO = new OrderDetailDAOImpl();
-
     QueryDAOImpl queryDAO = new QueryDAOImpl();
 
 
