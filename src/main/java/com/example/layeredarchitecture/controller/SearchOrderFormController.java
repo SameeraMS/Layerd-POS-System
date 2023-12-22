@@ -53,7 +53,6 @@ public class SearchOrderFormController {
             }
 
 
-
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to load customer ids").show();
         } catch (ClassNotFoundException e) {
