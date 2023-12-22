@@ -2,24 +2,25 @@ package com.example.layeredarchitecture.dao.custom.impl;
 
 import com.example.layeredarchitecture.dao.SQLUtil;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
-import com.example.layeredarchitecture.model.ItemDTO;
+import com.example.layeredarchitecture.dto.ItemDTO;
+import com.example.layeredarchitecture.entity.Item;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 public class ItemDAOImpl implements ItemDAO {
     @Override
-    public ArrayList<ItemDTO> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Item> getAll() throws SQLException, ClassNotFoundException {
         /*Connection connection = DBConnection.getDbConnection().getConnection();
         Statement stm = connection.createStatement();*/
 
         ResultSet rst = SQLUtil.execute("SELECT * FROM Item");
 
-        ArrayList<ItemDTO> getallItem = new ArrayList<>();
+        ArrayList<Item> getallItem = new ArrayList<>();
 
         while (rst.next()) {
-            ItemDTO itemDTO = new ItemDTO(rst.getString("code"), rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
-            getallItem.add(itemDTO);
+            Item item = new Item(rst.getString("code"), rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
+            getallItem.add(item);
         }
 
         return getallItem;
@@ -35,7 +36,7 @@ public class ItemDAOImpl implements ItemDAO {
         return SQLUtil.execute("DELETE FROM Item WHERE code=?",code);
     }
     @Override
-    public boolean save(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
+    public boolean save(Item item) throws SQLException, ClassNotFoundException {
         /*Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)");
         pstm.setString(1, itemDTO.getCode());
@@ -45,10 +46,10 @@ public class ItemDAOImpl implements ItemDAO {
         return pstm.executeUpdate() > 0;*/
 
         return SQLUtil.execute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",
-                itemDTO.getCode(),itemDTO.getDescription(),itemDTO.getUnitPrice(),itemDTO.getQtyOnHand());
+                item.getCode(),item.getDescription(),item.getUnitPrice(),item.getQtyOnHand());
     }
     @Override
-    public boolean update(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
+    public boolean update(Item item) throws SQLException, ClassNotFoundException {
         /*Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
         pstm.setString(1, itemDTO.getDescription());
@@ -58,7 +59,7 @@ public class ItemDAOImpl implements ItemDAO {
         return pstm.executeUpdate() > 0;*/
 
         return SQLUtil.execute("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",
-                itemDTO.getDescription(),itemDTO.getUnitPrice(),itemDTO.getQtyOnHand(),itemDTO.getCode());
+                item.getDescription(),item.getUnitPrice(),item.getQtyOnHand(),item.getCode());
     }
     @Override
     public boolean exist(String code) throws SQLException, ClassNotFoundException {
@@ -84,7 +85,7 @@ public class ItemDAOImpl implements ItemDAO {
         }
     }
     @Override
-    public ItemDTO search(String newItemCode) throws SQLException, ClassNotFoundException {
+    public Item search(String newItemCode) throws SQLException, ClassNotFoundException {
         /*Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code=?");
         pstm.setString(1, newItemCode + "");
@@ -92,7 +93,7 @@ public class ItemDAOImpl implements ItemDAO {
 
         ResultSet rst = SQLUtil.execute("SELECT * FROM Item WHERE code=?",newItemCode + "");
         rst.next();
-        ItemDTO item = new ItemDTO(newItemCode + "", rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
+        Item item = new Item(newItemCode + "", rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
 
         return item;
     }

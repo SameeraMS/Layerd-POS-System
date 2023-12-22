@@ -2,8 +2,8 @@ package com.example.layeredarchitecture.dao.custom.impl;
 
 import com.example.layeredarchitecture.dao.SQLUtil;
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
-import com.example.layeredarchitecture.model.CustomerDTO;
-import com.example.layeredarchitecture.model.OrderDTO;
+import com.example.layeredarchitecture.dto.OrderDTO;
+import com.example.layeredarchitecture.entity.Order;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -22,36 +22,36 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public OrderDTO search(String newValue) throws SQLException, ClassNotFoundException {
+    public Order search(String newValue) throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM Orders WHERE oid=?",newValue + "");
 
         rst.next();
-        OrderDTO orderDTO = new OrderDTO(newValue + "", rst.getString("date"), rst.getString("customerID"));
+        Order order = new Order(newValue + "", rst.getString("date"), rst.getString("customerID"));
 
-        return orderDTO;
+        return order;
     }
 
     @Override
-    public ArrayList<OrderDTO> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Order> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM Orders");
 
-        ArrayList<OrderDTO> getAllOrders = new ArrayList<>();
+        ArrayList<Order> getAllOrders = new ArrayList<>();
 
         while (rst.next()) {
-            OrderDTO orderDTO = new OrderDTO(rst.getString("oid"), rst.getString("date"), rst.getString("customerID"));
-            getAllOrders.add(orderDTO);
+            Order order = new Order(rst.getString("oid"), rst.getString("date"), rst.getString("customerID"));
+            getAllOrders.add(order);
         }
 
         return getAllOrders;
     }
 
     @Override
-    public boolean save(OrderDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean save(Order dto) throws SQLException, ClassNotFoundException {
         return false;
     }
 
     @Override
-    public boolean update(OrderDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Order dto) throws SQLException, ClassNotFoundException {
         return false;
     }
 

@@ -2,8 +2,7 @@ package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.BOFactory;
 import com.example.layeredarchitecture.bo.custom.CustomerBO;
-import com.example.layeredarchitecture.bo.custom.impl.CustomerBOImpl;
-import com.example.layeredarchitecture.model.CustomerDTO;
+import com.example.layeredarchitecture.dto.CustomerDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -77,9 +76,7 @@ public class ManageCustomersFormController {
                 tblCustomers.getItems().add(new CustomerTM(c.getId(), c.getName(), c.getAddress()));
             }
 
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 

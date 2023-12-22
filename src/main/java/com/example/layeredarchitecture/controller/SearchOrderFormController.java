@@ -3,7 +3,8 @@ package com.example.layeredarchitecture.controller;
 import com.example.layeredarchitecture.dao.custom.CustomerDAO;
 import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.QueryDAOImpl;
-import com.example.layeredarchitecture.model.*;
+import com.example.layeredarchitecture.dto.*;
+import com.example.layeredarchitecture.entity.Customer;
 import com.example.layeredarchitecture.view.tdm.SearchOrderTM;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.application.Platform;
@@ -46,9 +47,14 @@ public class SearchOrderFormController {
     private void loadallcustomerIds() {
         try {
 
-            ArrayList<CustomerDTO> allCustomers = customerDAO.getAll();
+            ArrayList<Customer> allCustomers = customerDAO.getAll();
+            ArrayList<CustomerDTO> customerDTOS = new ArrayList<>();
 
-            for (CustomerDTO c : allCustomers) {
+            for (Customer customer : allCustomers) {
+                customerDTOS.add(new CustomerDTO(customer.getId(), customer.getName(), customer.getAddress()));
+            }
+
+            for (CustomerDTO c : customerDTOS) {
                 cmbCustomerId.getItems().add(c.getId());
             }
 

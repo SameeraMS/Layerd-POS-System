@@ -1,11 +1,9 @@
 package com.example.layeredarchitecture.dao.custom;
 
-import com.example.layeredarchitecture.dao.SQLUtil;
 import com.example.layeredarchitecture.dao.SuperDAO;
-import com.example.layeredarchitecture.model.AddtblDto;
-import com.example.layeredarchitecture.model.SearchDto;
+import com.example.layeredarchitecture.dto.AddtblDto;
+import com.example.layeredarchitecture.dto.SearchDto;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 

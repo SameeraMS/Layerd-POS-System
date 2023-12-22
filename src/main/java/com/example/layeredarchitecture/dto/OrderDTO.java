@@ -1,7 +1,4 @@
-package com.example.layeredarchitecture.model;
-
-import java.time.LocalDate;
-
+package com.example.layeredarchitecture.dto;
 
 
 public class OrderDTO  {
