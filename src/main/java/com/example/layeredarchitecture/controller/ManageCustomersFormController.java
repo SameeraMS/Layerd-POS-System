@@ -39,8 +39,6 @@ public class ManageCustomersFormController {
     public TextField txtCustomerAddress;
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
-    //CustomerDAO customerDAO = new CustomerDAOImpl();
-
     CustomerBO customerBO = new CustomerBOImpl();
 
     public void initialize() {
@@ -74,20 +72,12 @@ public class ManageCustomersFormController {
         tblCustomers.getItems().clear();
         /*Get all customers*/
         try {
-
             ArrayList<CustomerDTO> allCustomers = customerBO.getAllCustomers();
 
             for (CustomerDTO c : allCustomers) {
                 tblCustomers.getItems().add(new CustomerTM(c.getId(), c.getName(), c.getAddress()));
             }
 
-            /*Connection connection = DBConnection.getDbConnection().getConnection();
-            Statement stm = connection.createStatement();
-            ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
-
-           while (rst.next()) {
-                tblCustomers.getItems().add(new CustomerTM(rst.getString("id"), rst.getString("name"), rst.getString("address")));
-            }*/
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         } catch (ClassNotFoundException e) {
@@ -166,16 +156,6 @@ public class ManageCustomersFormController {
                 } else {
                     new Alert(Alert.AlertType.ERROR, "Failed to save the customer").show();
                 }
-
-
-                /*Connection connection = DBConnection.getDbConnection().getConnection();
-                PreparedStatement pstm = connection.prepareStatement("INSERT INTO Customer (id,name, address) VALUES (?,?,?)");
-                pstm.setString(1, id);
-                pstm.setString(2, name);
-                pstm.setString(3, address);
-                pstm.executeUpdate();*/
-
-
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to save the customer " + e.getMessage()).show();
             } catch (ClassNotFoundException e) {
@@ -197,13 +177,6 @@ public class ManageCustomersFormController {
                 } else {
                     new Alert(Alert.AlertType.ERROR, "Failed to update the customer").show();
                 }
-
-                /*Connection connection = DBConnection.getDbConnection().getConnection();
-                PreparedStatement pstm = connection.prepareStatement("UPDATE Customer SET name=?, address=? WHERE id=?");
-                pstm.setString(1, name);
-                pstm.setString(2, address);
-                pstm.setString(3, id);
-                pstm.executeUpdate();*/
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to update the customer " + id + e.getMessage()).show();
             } catch (ClassNotFoundException e) {
@@ -219,15 +192,6 @@ public class ManageCustomersFormController {
         btnAddNewCustomer.fire();
     }
 
-
-    /*boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("SELECT id FROM Customer WHERE id=?");
-        pstm.setString(1, id);
-        return pstm.executeQuery().next();
-    }*/
-
-
     public void btnDelete_OnAction(ActionEvent actionEvent) {
         /*Delete Customer*/
         String id = tblCustomers.getSelectionModel().getSelectedItem().getId();
@@ -236,11 +200,6 @@ public class ManageCustomersFormController {
             if (!customerBO.existCustomer(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }
-            /*Connection connection = DBConnection.getDbConnection().getConnection();
-            PreparedStatement pstm = connection.prepareStatement("DELETE FROM Customer WHERE id=?");
-            pstm.setString(1, id);
-            pstm.executeUpdate();*/
-
             boolean isDelete = customerBO.deleteCustomer(id);
 
             if (isDelete){
@@ -248,7 +207,6 @@ public class ManageCustomersFormController {
             } else {
                 new Alert(Alert.AlertType.ERROR, "Failed to delete the customer").show();
             }
-
 
             tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
             tblCustomers.getSelectionModel().clearSelection();
@@ -263,25 +221,12 @@ public class ManageCustomersFormController {
 
     private String generateNewId() {
         try {
-
-
             return customerBO.nextCustomerId();
-
-            /*Connection connection = DBConnection.getDbConnection().getConnection();
-            ResultSet rst = connection.createStatement().executeQuery("SELECT id FROM Customer ORDER BY id DESC LIMIT 1;");
-            if (rst.next()) {
-                String id = rst.getString("id");
-                int newCustomerId = Integer.parseInt(id.replace("C00-", "")) + 1;
-                return String.format("C00-%03d", newCustomerId);
-            } else {
-                return "C00-001";
-            }*/
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new id " + e.getMessage()).show();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
 
         if (tblCustomers.getItems().isEmpty()) {
             return "C00-001";
