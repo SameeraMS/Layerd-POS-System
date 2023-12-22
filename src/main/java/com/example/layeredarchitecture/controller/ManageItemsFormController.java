@@ -1,6 +1,8 @@
 package com.example.layeredarchitecture.controller;
 
 
+import com.example.layeredarchitecture.bo.ItemBO;
+import com.example.layeredarchitecture.bo.ItemBOImpl;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
 import com.example.layeredarchitecture.model.ItemDTO;
@@ -37,8 +39,9 @@ public class ManageItemsFormController {
     public TableView<ItemTM> tblItems;
     public TextField txtUnitPrice;
     public JFXButton btnAddNewItem;
-    ItemDAO itemDAO = new ItemDAOImpl();
+  //  ItemDAO itemDAO = new ItemDAOImpl();
 
+    ItemBO itemBO = new ItemBOImpl();
     public void initialize() {
         tblItems.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
         tblItems.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -74,7 +77,7 @@ public class ManageItemsFormController {
         try {
 
 
-            ArrayList<ItemDTO> allItem = itemDAO.getAll();
+            ArrayList<ItemDTO> allItem = itemBO.getAllItem();
 
             for (ItemDTO i : allItem) {
                 tblItems.getItems().add(new ItemTM(i.getCode(), i.getDescription(), i.getUnitPrice(), i.getQtyOnHand()));
@@ -142,7 +145,7 @@ public class ManageItemsFormController {
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
         try {
 
-            if (!itemDAO.exist(code)) {
+            if (!itemBO.existItem(code)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
             }
             /*Connection connection = DBConnection.getDbConnection().getConnection();
@@ -151,7 +154,7 @@ public class ManageItemsFormController {
             pstm.executeUpdate();*/
 
 
-            boolean isDelete = itemDAO.delete(code);
+            boolean isDelete = itemBO.deleteItem(code);
 
             if (isDelete){
                 tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
@@ -192,7 +195,7 @@ public class ManageItemsFormController {
         if (btnSave.getText().equalsIgnoreCase("save")) {
             try {
 
-                if (itemDAO.exist(code)) {
+                if (itemBO.existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save Item
@@ -205,7 +208,7 @@ public class ManageItemsFormController {
                 pstm.executeUpdate();*/
 
 
-                boolean isSaved = itemDAO.save(new ItemDTO(code, description, unitPrice, qtyOnHand));
+                boolean isSaved = itemBO.saveItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
 
                 if (isSaved){
                     tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
@@ -220,7 +223,7 @@ public class ManageItemsFormController {
         } else {
             try {
 
-                if (!itemDAO.exist(code)) {
+                if (!itemBO.existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
                 /*Update Item*/
@@ -232,7 +235,7 @@ public class ManageItemsFormController {
                 pstm.setString(4, code);
                 pstm.executeUpdate();*/
 
-                boolean isUpdated = itemDAO.update(new ItemDTO(code, description, unitPrice, qtyOnHand));
+                boolean isUpdated = itemBO.updateItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
 
                 if (isUpdated){
                     new Alert(Alert.AlertType.INFORMATION, "Item updated successfully").show();
@@ -269,7 +272,7 @@ public class ManageItemsFormController {
 
     private String generateNewId() {
         try {
-            return itemDAO.nextId();
+            return itemBO.nextItemId();
 
             /*Connection connection = DBConnection.getDbConnection().getConnection();
             ResultSet rst = connection.createStatement().executeQuery("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");
